@@ -4,24 +4,126 @@
     <title>ECDSA Exchange</title>
     <script type="module" src="index.js"></script>
   </head>
-  <body>
-    <div class="components">
-      <div class="wallet">
+  <body style="width: 100%;">
+      <h1 id="wallet-title" style="text-align: center; margin-top: 5%;">Wallet</h1>
+
+      <!-- LOGIN -->
+      <div 
+        id="login" 
+        style="text-align: center; border: 3px solid black; width: fit-content; margin: 10% auto; padding: 3%; background-color: #eeeeee; border-radius: 25px;"
+      >
+        <h2>Login</h2>
+        <div>
+          <label>Public Key:</label>
+          <input 
+            type="text"
+            placeholder="Your Public Key"
+            id="public-key-input"
+          />
+        </div>
+        <div style="margin-top: 20px;">
+          <label>PIN:</label>
+          <input
+            type="password"
+            placeholder="PIN"
+            id="pin-input"
+          />
+        </div>
+        <button 
+          style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+          id="login-button"
+        >
+          Login
+        </button>
+        <p style="padding-top: 10px;">
+          HINT: Get your public key and PIN from the console of the server application.
+        </p>
+      </div>
+
+
+      <!-- CREATE TRANSACTION -->
+      <div 
+        id="create-transaction" 
+        style="display: block; text-align: center; border: 3px solid black; width: fit-content; margin: 10% auto; padding: 3%; background-color: #eeeeee; border-radius: 25px;"
+      >
+        <h2>Account Details</h2>
+        <div>
+          <p>Public Key: <span id="current-user-public-key"></span></p>
+          <p>Current Balance: <span id="current-user-balance"></span></p>
+          <button
+            class="logout-button"
+            style="font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+          >
+            Logout
+          </button>
+        </div>
+        <h2>Send ETH</h2>
+        <div>
+          <label>Recipient Public Key:</label>
+          <input 
+            type="text"
+            id="recipient-public-key"
+            placeholder="Key"
+          />
+        </div>
+        <div style="margin-top: 20px;">
+          <label>Transaction Amount:</label>
+          <input 
+            type="number"
+            id="transaction-amount"
+            placeholder="ETH"
+          />
+        </div>
+        <button 
+          id="send-transaction-button"
+          style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+        >
+          Send
+        </button>
+      </div>
+
+
+      <!-- CONFIRM TRANSACTION -->
+      <div 
+        id="confirm-transaction" 
+        style="display: block;"
+      >
+        <h2>Confirm Transaction</h2>
+
+        <div>
+          <h3>Transaction Summary</h3>
+        </div>
+
+        <button
+          class="confirm-transaction-button"
+          style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+        >
+          Confirm Transaction
+        </button>
+
+        <button
+          class="cancel-transaction-button"
+          style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+        >
+          Cancel Transaction
+        </button>
+      </div>
+
+      <!-- <div class="wallet">
         <h1> Your Wallet </h1>
         <input type="text" id="exchange-address" placeholder="Your Address" />
         <div id="balance">
           0
         </div>
-      </div>
+      </div> -->
 
-      <div class="send">
+      <!-- <div class="send">
         <h1> Send Amount </h1>
         <input type="text" id="send-amount" placeholder="Send Amount" />
         <input type="text" id="recipient" placeholder="Recipient" />
         <div class="button" id="transfer-amount">
           Transfer Amount
         </div>
-      </div>
-    </div>
+      </div> -->
   </body>
 </html>
