@@ -1,5 +1,8 @@
 # ECDSA EXCHANGE
 
+server: nodemon index
+client: npx parcel index.html
+
 ## Solution
 
 This solution consists of three steps:

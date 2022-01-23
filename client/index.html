@@ -40,23 +40,23 @@
         </p>
       </div>
 
-
       <!-- CREATE TRANSACTION -->
       <div 
         id="create-transaction" 
-        style="display: block; text-align: center; border: 3px solid black; width: fit-content; margin: 10% auto; padding: 3%; background-color: #eeeeee; border-radius: 25px;"
+        style="display: none; text-align: center; border: 3px solid black; width: fit-content; margin: 10% auto; padding: 3%; background-color: #eeeeee; border-radius: 25px;"
       >
         <h2>Account Details</h2>
         <div>
           <p>Public Key: <span id="current-user-public-key"></span></p>
           <p>Current Balance: <span id="current-user-balance"></span></p>
           <button
-            class="logout-button"
             style="font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
+            id="logout-button"
           >
             Logout
           </button>
         </div>
+        <hr/>
         <h2>Send ETH</h2>
         <div>
           <label>Recipient Public Key:</label>
@@ -82,48 +82,28 @@
         </button>
       </div>
 
-
       <!-- CONFIRM TRANSACTION -->
       <div 
         id="confirm-transaction" 
-        style="display: block;"
+        style="display: none; text-align: center; border: 3px solid black; width: fit-content; margin: 10% auto; padding: 3%; background-color: #eeeeee; border-radius: 25px;"
       >
         <h2>Confirm Transaction</h2>
-
         <div>
-          <h3>Transaction Summary</h3>
+          <p>Recipient: <span id="confirm-recipient"></span></p>
+          <p>Amount: <span id="confirm-amount"></span></p>
         </div>
-
         <button
-          class="confirm-transaction-button"
+          id="confirm-transaction-button"
           style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
         >
-          Confirm Transaction
+          Confirm
         </button>
-
         <button
-          class="cancel-transaction-button"
+          id="cancel-transaction-button"
           style="margin-top: 20px; font-size: 1.2em; background-color: #444444; color: white; border-radius: 5px; padding: 1% 2%; cursor: pointer;"
         >
-          Cancel Transaction
+          Cancel
         </button>
       </div>
-
-      <!-- <div class="wallet">
-        <h1> Your Wallet </h1>
-        <input type="text" id="exchange-address" placeholder="Your Address" />
-        <div id="balance">
-          0
-        </div>
-      </div> -->
-
-      <!-- <div class="send">
-        <h1> Send Amount </h1>
-        <input type="text" id="send-amount" placeholder="Send Amount" />
-        <input type="text" id="recipient" placeholder="Recipient" />
-        <div class="button" id="transfer-amount">
-          Transfer Amount
-        </div>
-      </div> -->
   </body>
 </html>

@@ -8,6 +8,7 @@ const port = 3042;
 app.use(cors());
 app.use(express.json());
 
+
 // Create and log accounts
 
 let amountOfAccounts = 3
@@ -15,10 +16,13 @@ let accounts = {}
 
 const generateAccounts = () => {
   const ec = new EC('secp256k1');
+
   for(let i = 0 ; i < amountOfAccounts ; i++) {
     let ecKey = ec.genKeyPair();
+
     let thisPublicKey = ecKey.getPublic().encode('hex');
     thisPublicKey = '0x' + thisPublicKey.substring(thisPublicKey.length - 40);
+
     accounts[thisPublicKey] = {
       privateKey: ecKey.getPrivate().toString(16),
       publicX: ecKey.getPublic().x.toString(16),
@@ -26,7 +30,7 @@ const generateAccounts = () => {
       balance: Math.floor(Math.random() * 999),
       pin: Math.floor(Math.random() * (9999 - 1001) + 1001)
     }
-  }
+  } 
 }
 
 const logAccounts = () => {
@@ -40,6 +44,7 @@ const logAccounts = () => {
     })
     logAccountsIndex++
   }
+
   console.log("\n Private Keys\n", "============")
   logAccountsIndex = 1
   for(property in accounts) {
@@ -52,32 +57,47 @@ const logAccounts = () => {
 generateAccounts();
 logAccounts();
 
+
 // Routes
 
 // Login
 app.post('/login', (req, res) => {
-  if(accounts[req.body.publicKey] === undefined) { res.send({loggedIn: false}) }
-  else if(accounts[req.body.publicKey].pin === req.body.pin) {
+  if(accounts[req.body.publicKey] === undefined) { 
+    res.send({ loggedIn: false }) 
+  } else if (accounts[req.body.publicKey].pin === req.body.pin) {
+    
     res.send({
       currentUserBalance: accounts[req.body.publicKey].balance,
       currentUserPublicKey: req.body.publicKey,
       loggedIn: true
     })
-  } else { res.send({loggedIn: false}) }
+
+  } else { 
+    res.send({ loggedIn: false }) 
+  }
 })
 
 // Sign Transaction (Initiate Transaction)
 app.post('/send', (req, res) => {
-  if(req.body.transactionAmount > accounts[req.currentUserPublicKey].balance) {
+  if(req.body.transactionAmount > accounts[req.body.currentUserPublicKey].balance) {
     res.send({ error: "Insufficient ETH" })
-  } else if(accounts[req.body.recipientPublicKey] === undefined) {
+  } else if(
+    (accounts[req.body.recipientPublicKey] === undefined) || 
+    (req.body.currentUserPublicKey === req.body.recipientPublicKey)
+  ) { 
     res.send({ error: "Invalid Recipient" })
   } else {
+
     const ec = new EC('secp256k1');
-    const key = ec.keyFromPrivate(accounts[req.currentUserPublicKey].privateKey);
-    const signatureMessage = req.body.transactionAmount + '_to_' + req.body.recipientPublicKey;
+    const key = ec.keyFromPrivate(accounts[req.body.currentUserPublicKey].privateKey);
+
+    const signatureMessage = req.body.transactionAmount + 
+    '_from_' + req.body.currentUserPublicKey + 
+    '_to_' + req.body.recipientPublicKey;
+
     const msgHash = SHA256(signatureMessage);
     const signature = key.sign(msgHash.toString());
+
     res.send({
       error: false,
       signatureR: signature.r.toString(16),
@@ -86,29 +106,40 @@ app.post('/send', (req, res) => {
       publicX: accounts[req.body.currentUserPublicKey].publicX,
       publicY: accounts[req.body.currentUserPublicKey].publicY,
     })
+
   }
 })
 
 // Verify Transaction Signature (Confirm Transaction)
 app.post('/confirm', (req, res) => {
   const ec = new EC('secp256k1');
+
   const publicKey = {
     x: req.body.publicX,
     y: req.body.publicY
   }
   const key = ec.keyFromPublic(publicKey, 'hex');
+
   const msgHash = SHA256(req.body.signatureMessage).toString();
   const signature = {
     r: req.body.signatureR,
     s: req.body.signatureS
   };
+
   if(key.verify(msgHash, signature) === true) {
-    //calculate new balances
-    let newBalance = 0;
+
+    let currentUserPublicKey = req.body.signatureMessage.split('_')[2]
+    let recipientPublicKey = req.body.signatureMessage.split('_')[4]
+    let transactionAmount = req.body.signatureMessage.split('_')[0]
+    
+    accounts[currentUserPublicKey].balance = accounts[currentUserPublicKey].balance - parseInt(transactionAmount)
+    accounts[recipientPublicKey].balance = accounts[recipientPublicKey].balance + parseInt(transactionAmount)
+
     res.send({
       transactionConfirmed: true,
-      newBalance: newBalance
+      newBalance: accounts[currentUserPublicKey].balance
     })
+
   } else {
     res.send({ transactionConfirmed: false })
   }
