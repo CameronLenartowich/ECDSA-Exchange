@@ -1,7 +1,7 @@
 # ECDSA EXCHANGE
 
-server: nodemon index
-client: npx parcel index.html
+- server: nodemon index
+- client: npx parcel index.html
 
 ## Solution
 
@@ -13,11 +13,11 @@ This solution consists of three steps:
 
 ### Login
 
-The user will sign in using the Public Key and PIN provided to their account. The PIN grants access to using their private key, however their private key never leaves the server to make sure that it is never leaked.
+The user will sign in using the Public Key and PIN provided to their account. The PIN grants the user access to using their private key, however their private key never leaves the server to make sure that it is never leaked.
 
 ### Initiate Transaction
 
-Once signed in, the user can initiate a transaction. Initiating a transaction will make a request to the server to create a signature for this transaction.
+Once signed in, the user can initiate a transaction. Initiating a transaction will make a request to the server to create a digital signature for this transaction. The signature is then returned to the client.
 
 ### Confirm Transaction
 
@@ -26,4 +26,4 @@ Once the client receives the transaction signature from the server, the client i
 ### Summary
 
 - The users private key never leaves the server
-- The signature creation and signature validation are seperated into two different api calls. And the user can confirm the details of the transaction signature between these two steps (confirm the signature message: transaction amount and recipient).
+- The signature creation and signature validation are seperated into two different api calls. The user can confirm the details of the transaction signature between these two steps including the recipient and transaction amount.
